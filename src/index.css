@@ -1,0 +1,91 @@
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne"),
+    url("./assets/fonts/SamsungOne.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "SamsungOne";
+  src: local("SamsungOne"),
+    url("./assets/fonts/SamsungOneBold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Samsung Sharp Sans";
+  font-weight: normal;
+  src: local("Samsung Sharp Sans Regular"),
+    url("./assets/fonts/SamsungSharp.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Samsung Sharp Sans";
+  font-weight: bold;
+  src: local("Samsung Sharp Sans Bold"),
+    url("./assets/fonts/SamsungSharpBold.woff") format("woff");
+}
+
+html {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  font-family: SamsungOne, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  background-color: black !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.button:hover {
+  background-image: linear-gradient(to right, #00000010, #00000010);
+  transition: all 0.2s;
+}
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 1 0and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+:root {
+  --blue: #1428a0;
+  --white: #fff;
+  --black: #000;
+  --grey: #8a8a8a;
+  --light-grey: #d3d3d3;
+  --x-light-grey: #f0f0f0;
+  --light-blue: #3583e4;
+  --x-light-blue: #f4f7fd;
+  --dark-grey: #595959;
+  --dark-gradient-1: linear-gradient(
+    179.65deg,
+    rgba(0, 0, 0, 0) -9.38%,
+    rgba(0, 0, 0, 0.6) 82.83%
+  );
+  --dark-gradient-2: linear-gradient(
+    179.92deg,
+    rgba(0, 0, 0, 0) -14.61%,
+    rgba(0, 0, 0, 0.6) 67.06%
+  );
+  --dark-gradient-3: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.8),
+    rgba(0, 0, 0, 0.8)
+  );
+}

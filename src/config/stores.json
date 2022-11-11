@@ -1,0 +1,103 @@
+[
+  {
+    "id": "s_1",
+    "name": "Ashoka Sales - Sec-16",
+    "type": "Experience store",
+    "address": "Shop No 5, Sam Plaza Irani Road Malyan Opposite ICICI Bank Thane Maharashtra 401602, Thane, 401602",
+    "email": "truptisales25@gmail.com",
+    "phone": "+918888986095",
+    "position": {
+      "lat": 28.4099219,
+      "lng": 77.3197109
+    },
+    "category": {
+      "name": "Mobile",
+      "type": [
+        "Smartphones",
+        "Watches",
+        "Smartphones accessories",
+        "Tablets",
+        "Audio Sound"
+      ]
+    }
+  },
+  {
+    "id": "s_2",
+    "name": "Bansal Electonics - Panchkula Sec-11",
+    "type": "Experience store",
+    "address": "Shop No 5, Sam Plaza Irani Road Malyan Opposite ICICI Bank Thane Maharashtra 401602, Thane, 401602",
+    "email": "truptisales25@gmail.com",
+    "phone": "+918888986095",
+    "position": {
+      "lat": 30.688187,
+      "lng": 76.851187
+    },
+    "category": {
+      "name": "Mobile",
+      "type": [
+        "Smartphones",
+        "Watches",
+        "Smartphones accessories",
+        "Tablets",
+        "Audio Sound"
+      ]
+    }
+  },
+  {
+    "id": "s_3",
+    "name": "City Enterprises",
+    "type": "Experience store",
+    "address": "Shop No 5, Sam Plaza Irani Road Malyan Opposite ICICI Bank Thane Maharashtra 401602, Thane, 401602",
+    "email": "truptisales25@gmail.com",
+    "phone": "+918888986095",
+    "position": { "lat": 29.146111, "lng": 75.727111 },
+    "category": {
+      "name": "Mobile",
+      "type": [
+        "Smartphones",
+        "Watches",
+        "Smartphones accessories",
+        "Tablets",
+        "Audio Sound"
+      ]
+    }
+  },
+  {
+    "id": "s_4",
+    "name": "Kanha Electronics",
+    "type": "Experience store",
+    "address": "Shop No 5, Sam Plaza Irani Road Malyan Opposite ICICI Bank Thane Maharashtra 401602, Thane, 401602",
+    "email": "truptisales25@gmail.com",
+    "phone": "+918888986095",
+    "position": { "lat": 28.801141, "lng": 76.135611 },
+    "category": {
+      "name": "Mobile",
+      "type": [
+        "Smartphones",
+        "Watches",
+        "Smartphones accessories",
+        "Tablets",
+        "Audio Sound"
+      ]
+    }
+  },
+  {
+    "id": "s_5",
+    "name": "M.S. Electroplaza",
+    "type": "Experience store",
+    "address": "Shop No 5, Sam Plaza Irani Road Malyan Opposite ICICI Bank Thane Maharashtra 401602, Thane, 401602",
+    "email": "truptisales25@gmail.com",
+    "phone": "+918888986095",
+    "position": { "lat": 28.3972931, "lng": 77.3043406 },
+    "category": {
+      "name": "Mobile",
+      "type": [
+        "Smartphones",
+        "Watches",
+        "Smartphones accessories",
+        "Tablets",
+        "Audio Sound"
+      ]
+    }
+  }
+]

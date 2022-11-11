@@ -1,0 +1,7 @@
+.loyalty-modal .modal-content {
+  border: none !important;
+  background-color: transparent !important;
+  width: max-content;
+  justify-content: center;
+}
+

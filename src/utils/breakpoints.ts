@@ -1,0 +1,9 @@
+export const xxs = "@media(max-width: 330px)";
+export const xs = "@media(max-width: 400px)";
+export const ls = "@media(max-width: 950px) and (max-height: 530px)";
+export const sls = "@media(max-width: 750px) and (max-height: 450px)";
+export const xsls = "@media(max-width: 750px) and (max-height: 330px)";
+export const sm = "@media(max-width: 576px)";
+export const md = "@media(max-width: 1024px)";
+export const lg = "@media(max-width: 1200px)";
+export const xl = "@media(min-width: 1200px)";

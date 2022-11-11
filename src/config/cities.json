@@ -1,0 +1,51 @@
+[
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Lucknow"
+  },
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Indore"
+  },
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Jammu"
+  },
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Vijayawada"
+  },
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Ahmedabad"
+  },
+  {
+    "position": {
+      "lat": 12.73883,
+      "lng": 77.899843
+    },
+    "address": "Jalandhar"
+  },
+  {
+    "position": {
+      "lat": 28.4228859,
+      "lng": 76.8496619
+    },
+    "address": "Gurugram"
+  }
+]
