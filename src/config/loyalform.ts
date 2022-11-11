@@ -1,11 +1,11 @@
-import { State } from "../types/location.types";
-import stores from "./stores.json";
+import { StoreType } from "../types/store.types";
 
 export const fields: {
-  type: "text" | "email" | "number" | "select";
+  type: "text" | "email" | "number" | "select" | "search";
   name: string;
   placeholder: string;
-  options?: string[] | State[];
+  search?: boolean;
+  options?: string[] | StoreType[];
   validation?: {
     required?: { value: boolean; message: string };
     maxLength?: { value: number; message: string };
@@ -14,7 +14,7 @@ export const fields: {
   };
 }[] = [
   {
-    type: "text",
+    type: "search",
     name: "name",
     placeholder: "Enter your name",
     validation: {
@@ -22,7 +22,7 @@ export const fields: {
     },
   },
   {
-    type: "number",
+    type: "search",
     name: "mobile",
     placeholder: "Enter your phone",
     validation: {
@@ -38,7 +38,7 @@ export const fields: {
     },
   },
   {
-    type: "email",
+    type: "search",
     name: "email",
     placeholder: "Enter your email",
     validation: {
@@ -56,15 +56,6 @@ export const fields: {
     validation: {
       required: { value: true, message: "This field is required" },
     },
-    options: [
-      "Maharashtra",
-      "Karnataka",
-      "Madhya Pradesh",
-      "Uttar Pradesh",
-      "Rajasthan",
-      "Gujrat",
-      "Haryana",
-    ],
   },
   {
     type: "select",
@@ -73,24 +64,16 @@ export const fields: {
     validation: {
       required: { value: true, message: "This field is required" },
     },
-    options: [
-      "Mumbai",
-      "Bangalore",
-      "Chennai",
-      "Kolkata",
-      "Delhi",
-      "Kolhapur",
-      "Gurugram",
-    ],
   },
 
   {
     type: "select",
+    search: true,
     name: "store",
     placeholder: "Please select a store",
     validation: {
       required: { value: true, message: "This field is required" },
     },
-    options: stores.map((store) => store.name),
+    options: [],
   },
 ];

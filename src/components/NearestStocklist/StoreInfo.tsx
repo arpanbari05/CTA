@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { Button } from "..";
-import { Store } from "../../types/stocklist.types";
+import { StoreType } from "../../types/store.types";
 import { ls, sm } from "../../utils/breakpoints";
 import { GoLocation } from "react-icons/go";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineInfoCircle, AiOutlineMail } from "react-icons/ai";
 import { IoCallOutline } from "react-icons/io5";
 import { RiDirectionLine } from "react-icons/ri";
 import { IconButton } from "../../styles";
 
 interface Props {
-  store: Store;
+  store: StoreType;
   onClose: () => void;
 }
 
@@ -18,8 +18,8 @@ const StoreInfo: React.FC<Props> = (props) => {
   return (
     <StoreInfoWrapper>
       <div className="header">
-        <div className="title">{store.name}</div>
-        <div className="store-type">{store.type}</div>
+        <div className="title">{store["BUSINESS / BRAND NAME"]}</div>
+        <div className="store-type">Experience store</div>
       </div>
       <div className="d-grid align-items-start info-container gap-4">
         <div className="d-grid gap-4">
@@ -28,36 +28,43 @@ const StoreInfo: React.FC<Props> = (props) => {
             <a
               href={`https://www.google.com/maps/search/?api=1&query=19.99,72.73999999999999`}
             >
-              {store.address}
+              {store["ADDRESS 1"]}, {store["ADDRESS 2"]}, {store.LANDMARK},{" "}
+              {store.CITY}, {store.STATE}, {store.POSTCODE}
             </a>
           </div>
-          {/* <div className="link d-flex gap-2">
-            <IoCallOutline size={18} />
-            <a href={`tel:88499494939`}>{store.phone}</a>
-          </div>
-          <div className="link d-flex gap-2">
+          <div className="link d-flex gap-2 align-items-center">
             <AiOutlineMail size={18} />
-            <a href={`mailto:tru@gmail.com`}>{store.email}</a>
-          </div> */}
+            <a href={`mailto:${store["STORE EMAIL ID"]}`}>
+              {store["STORE EMAIL ID"]}
+            </a>
+          </div>
           <div className="d-flex align-items-center gap-3 w-75">
             <IconButton
               as="a"
               className="button text-dark"
-              href={`tel:${store.phone}`}
+              href={`tel:+${store["MAIN PHONE NO."]}`}
             >
               <IoCallOutline size={18} />
             </IconButton>
-            <Button
-              styledCss="border: 1px solid #ddd;"
-              secondary
-              className="px-2 py-2 flex-grow-1"
+            <a
+              href={`http://maps.google.com/?q=${store.LATITUDE},${store.LONGITUDE}`}
+              target="_blank"
+              rel="noreferrer"
+              style={{ textDecoration: "none" }}
+              className="flex-grow-1"
             >
-              <RiDirectionLine size={18} />
-              <div>Get directions</div>
-            </Button>
+              <Button
+                styledCss="border: 1px solid #ddd;"
+                secondary
+                className="px-2 py-2 w-100"
+              >
+                <RiDirectionLine size={18} />
+                <div>Get directions</div>
+              </Button>
+            </a>
           </div>
         </div>
-        <div>
+        {/* <div>
           <div className="title mb-2">Product Categories in Store</div>
           <div className="sub-title mb-1">{store.category.name}</div>
           <div className="categories-grid">
@@ -65,7 +72,7 @@ const StoreInfo: React.FC<Props> = (props) => {
               <div key={type}>{type}</div>
             ))}
           </div>
-        </div>
+        </div> */}
         <div className="bottom-note d-flex gap-2">
           <AiOutlineInfoCircle size={24} />
           <div>

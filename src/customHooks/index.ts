@@ -1,9 +1,24 @@
 import { Location, State } from "./../types/location.types";
-import { useCallback, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import {
+  MutableRefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useMutation, useQuery } from "react-query";
 import { AxiosError } from "axios";
 import { fields as loyaltyFormFields } from "../config/loyalform";
-import { fetchCities, fetchCurrentLocation, fetchStates } from "../services";
+import {
+  fetchCities,
+  fetchCurrentLocation,
+  fetchStates,
+  requestCall,
+} from "../services";
+import RequestcallParametersType from "../types/requestcall.type";
+import { StoreType } from "../types/store.types";
+import { StocklistContext } from "../Contexts/StocklistContext";
+import Papa, { ParseResult } from "papaparse";
 
 export function useToggle(initialValue = false): {
   show: boolean;
@@ -144,20 +159,217 @@ export const useStatesAndCities = (state: string) => {
   };
 };
 
-export const useLoyaltyFormFields = (state: string) => {
-  const fields = [...loyaltyFormFields];
+export const useStoreLocatorSearch = (searchQuery: string) => {
+  const { storelist, getStoresInCity } = useContext(StocklistContext);
+  const [filteredStores, setFilteredStores] = useState<StoreType[]>([]);
+  const { data } = useCurrentLocation();
 
-  // const { cities, states } = useStatesAndCities(state);
+  const getFilteredStorelist = useCallback(() => {
+    if (!data?.city) return;
+    const storesInCity = getStoresInCity(data.city);
+    if (!searchQuery) return storesInCity;
+    return storelist.filter((store) => {
+      const name = store["BUSINESS / BRAND NAME"].split(" ");
+      const pincode = store.POSTCODE;
+      const locality = store.LOCALITY;
+      const state = store.STATE;
+      const city = store.CITY;
+      const matches = [pincode, locality, state, city]
+        .concat(name)
+        .some((item) =>
+          item.toUpperCase().startsWith(searchQuery.toUpperCase())
+        );
+      return matches;
+    });
+  }, [searchQuery, storelist, getStoresInCity, data?.city]);
 
-  // if (states) {
-  //   const stateFieldIndex = fields.findIndex((field) => field.name === "state");
-  //   fields[stateFieldIndex].options = states;
-  // }
+  useEffect(() => {
+    const filteredStores = getFilteredStorelist();
+    if (filteredStores) {
+      setFilteredStores(filteredStores);
+    }
+  }, [getFilteredStorelist]);
 
-  // if (cities) {
-  //   const cityFieldIndex = fields.findIndex((field) => field.name === "city");
-  //   fields[cityFieldIndex].options = cities;
-  // }
+  return { filteredStores };
+};
 
-  return fields;
+export const useLoyaltyFormFields = (state: any, setValue: any) => {
+  const [fields, setFields] = useState([...loyaltyFormFields]);
+  const { storelist, getStates, getCities } = useCSVData();
+  const [storeSearchQuery, setStoreSearchQuery] = useState("");
+  const [shouldInitializeStore, setShouldInitializeStore] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+  const { data } = useCurrentLocation();
+
+  const getStoresInCity = useCallback(() => {
+    return storelist.filter((store) => {
+      const storeName = store["BUSINESS / BRAND NAME"].toUpperCase();
+      const locality = store.LOCALITY.toUpperCase();
+      return (
+        store.CITY === state.city &&
+        (storeName.includes(storeSearchQuery.toUpperCase().trim()) ||
+          locality.startsWith(storeSearchQuery.toUpperCase().trim()))
+      );
+    });
+  }, [state.city, storeSearchQuery, storelist]);
+
+  const getCategory = useCallback(() => {
+    // if (isProductDetailsOpen) {
+    //   const product = getProduct(currentProductId);
+    //   if (product?.category) {
+    //     return product.category;
+    //   } else return "AV";
+    // } else return "AV";
+    return "AV";
+  }, []);
+
+  const cityFieldIndex = fields.findIndex((field) => field.name === "city");
+
+  const stateFieldIndex = fields.findIndex((field) => field.name === "state");
+
+  useEffect(() => {
+    setShouldInitializeStore(true);
+  }, [state.city]);
+
+  useEffect(() => {
+    setFields((prev) => {
+      const tempFields = [...prev];
+      const storesInCity = getStoresInCity();
+      const storesFieldIndex = tempFields.findIndex(
+        (field) => field.name === "store"
+      );
+      tempFields[storesFieldIndex].options = storesInCity;
+      return tempFields;
+    });
+  }, [setFields, getStoresInCity, getStates, stateFieldIndex]);
+
+  useEffect(() => {
+    const states = getStates();
+    setFields((prev) => {
+      const tempFields = [...prev];
+      tempFields[stateFieldIndex].options = states;
+      return tempFields;
+    });
+  }, [getStates, stateFieldIndex]);
+
+  useEffect(() => {
+    const cities = getCities(state.state);
+    setValue("city", cities[0]);
+
+    setFields((prev) => {
+      const tempFields = [...prev];
+      tempFields[cityFieldIndex].options = cities;
+      return tempFields;
+    });
+  }, [getCities, state.state, setValue, cityFieldIndex]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (initialized || !data) return;
+
+      const stateOptions = fields[stateFieldIndex].options;
+      const cityOptions = fields[cityFieldIndex].options;
+
+      if (stateOptions?.length) {
+        setValue("state", data.region);
+      }
+      if (cityOptions?.length) {
+        setValue("city", data.city);
+      }
+      if (cityOptions?.length && stateOptions?.length) {
+        setInitialized(true);
+      }
+    }, 10);
+  }, [cityFieldIndex, fields, initialized, setValue, stateFieldIndex, data]);
+
+  return {
+    fields,
+    currentLocation: data,
+    getCategory,
+    setStoreSearchQuery,
+    shouldInitializeStore,
+    setShouldInitializeStore,
+  };
+};
+
+export const useCSVData = () => {
+  const [storelist, setStorelist] = useState<StoreType[]>([]);
+
+  const getCSV = useCallback(() => {
+    Papa.parse(
+      "https://content.helloviewer.io/samsung_content/documents/Master_SmartPlaza.csv",
+      {
+        header: true,
+        download: true,
+        skipEmptyLines: true,
+        delimiter: ",",
+        complete: (results: ParseResult<StoreType>) => {
+          setStorelist(results.data);
+        },
+      }
+    );
+  }, []);
+
+  const getStates = useCallback(() => {
+    const filteredStates = storelist.map((store) => store.STATE);
+    return [...new Set(filteredStates)];
+  }, [storelist]);
+
+  const getCities = useCallback(
+    (state: string) => {
+      const filteredCities: string[] = [];
+      storelist.forEach((store) => {
+        if (store.STATE === state) {
+          filteredCities.push(store.CITY);
+        }
+      });
+      return [...new Set(filteredCities)];
+    },
+    [storelist]
+  );
+
+  const getStoresInCity = useCallback(
+    (city: string) => {
+      return storelist.filter((store) => {
+        return store.CITY === city;
+      });
+    },
+    [storelist]
+  );
+
+  useEffect(() => {
+    getCSV();
+  }, [getCSV]);
+
+  return { storelist, getStates, getCities, getStoresInCity };
+};
+
+export const useRequestCall = () => {
+  const mutation = useMutation(
+    "request_call",
+    (requestCallParameters: RequestcallParametersType) =>
+      requestCall(requestCallParameters)
+  );
+
+  return mutation;
+};
+
+export const useOnClickOutside = (
+  ref: MutableRefObject<HTMLElement | null>,
+  handler: (arg0: { target: any }) => void
+) => {
+  useEffect(() => {
+    const listener = (event: { target: any }) => {
+      if (!ref.current || ref.current.contains(event.target)) {
+        return;
+      }
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, [ref, handler]);
 };

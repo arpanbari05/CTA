@@ -15,7 +15,7 @@ const SearchInput: React.FC<Props> = (props) => {
       <div className="input-container">
         <input
           onChange={onChange}
-          type="text"
+          type="search"
           placeholder="Enter Store Name, Address, Pincode"
           value={value}
         />

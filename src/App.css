@@ -98,3 +98,7 @@
     margin: 0 !important;
   }
 }
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}

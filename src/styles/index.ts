@@ -181,7 +181,7 @@ export const FloatableInputWrapper = styled.div<{
   input {
     padding: 0.7rem 0.9rem;
     padding-bottom: 0.2rem;
-    width: 100%;
+    width: 95%;
     font-weight: bold;
   }
 
@@ -231,6 +231,46 @@ export const SelectInputWrapper = styled.div<{
     padding: 0.7rem 0.9rem;
     padding-bottom: 0.2rem;
     width: 100%;
+    font-weight: bold;
+  }
+`;
+
+export const SelectSearchableInputWrapper = styled.div`
+  position: relative;
+
+  .options-container {
+    width: 100%;
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    transform: translateY(100%);
+    background: white;
+    border: 1px solid gray;
+    border-radius: 7px;
+    max-height: 9rem;
+    overflow: auto;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+
+    .option {
+      width: 100%;
+      padding-left: 10px;
+      padding-right: 10px;
+      text-align: left;
+
+      &:hover {
+        background-color: var(--x-light-grey);
+      }
+    }
+
+    .option.active {
+      background-color: var(--light-blue);
+    }
+  }
+  .dropdown-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
   }
 `;
 
@@ -248,4 +288,37 @@ export const AudioButtonWrapper = styled.button`
   font-size: 2rem;
   pointer-events: all;
   width: max-content;
+`;
+
+export const ToastWrapper = styled.div<{ show: boolean }>`
+  padding: 0.5rem 0.7rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid #45bb64;
+  background-color: #eaf7ee;
+  position: fixed;
+  left: 50%;
+  bottom: 5rem;
+  transform: translateX(-50%)
+    translateY(${(props) => (props.show ? "0" : "20rem")});
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+
+  .icon-wrapper {
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+  }
+
+  .close-button {
+    margin-left: 3rem;
+  }
+
+  ${sm} {
+    width: 95%;
+  }
 `;

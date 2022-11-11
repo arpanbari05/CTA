@@ -13,8 +13,8 @@ const SearchSuggestions: React.FC<Props> = (props) => {
 
   return (
     <SearchSuggestionsWrapper>
-      {list.map((ele) => (
-        <SuggestionItem onClick={() => onItemClick(ele)}>
+      {list.map((ele, index) => (
+        <SuggestionItem key={index} onClick={() => onItemClick(ele)}>
           {ele.address}
         </SuggestionItem>
       ))}

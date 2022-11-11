@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Store } from "../../types/stocklist.types";
+import { StoreType } from "../../types/store.types";
 import { FiChevronRight } from "react-icons/fi";
 import { useToggle } from "../../customHooks";
 import { useContext } from "react";
@@ -9,22 +9,28 @@ import { ToggleButton, Button } from "../../components";
 import { IconButton } from "../../styles";
 import { IoCallOutline } from "react-icons/io5";
 import { RiDirectionLine } from "react-icons/ri";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 interface Props {
-  storelist: Store[];
+  storelist: StoreType[];
+  toggler: {
+    show: boolean;
+    handleHide: () => void;
+    handleShow: () => void;
+    handleToggle: () => void;
+  };
 }
 
 interface StoreProps {
-  store: Store;
-  onClick: (store: Store) => void;
+  store: StoreType;
+  onClick: (store: StoreType) => void;
 }
 
 const StoreList: React.FC<Props> = (props) => {
-  const { storelist } = props;
+  const { storelist, toggler } = props;
   const { setStore, storeDetailsToggler } = useContext(StocklistContext);
-  const toggler = useToggle();
 
-  const handleStoreItemClick = (store: Store) => {
+  const handleStoreItemClick = (store: StoreType) => {
     setStore(store);
     storeDetailsToggler.handleShow();
   };
@@ -32,13 +38,24 @@ const StoreList: React.FC<Props> = (props) => {
   return (
     <Wrapper show={toggler.show}>
       <StoreListWrapper show={toggler.show}>
-        {storelist.map((store) => (
-          <StoreItem
-            key={store.id}
-            onClick={handleStoreItemClick}
-            store={store}
-          />
-        ))}
+        {storelist.length > 0 ? (
+          storelist.map((store) => (
+            <StoreItem
+              key={store["ACTUAL CLIENT STORE ID"]}
+              onClick={handleStoreItemClick}
+              store={store}
+            />
+          ))
+        ) : (
+          <div className="d-flex flex-column align-items-center">
+            <IoInformationCircleOutline size={45} />
+            <h4 className="text-bold">No Result data</h4>
+            <small className="w-75 text-center">
+              Please inlarge the area of the store you are looking for Or Place
+              enter your local/store name
+            </small>
+          </div>
+        )}
       </StoreListWrapper>
       <ToggleButton
         className="only-landscape"
@@ -73,8 +90,9 @@ const StoreItem: React.FC<StoreProps> = (props) => {
           <div className="blue-dot" />
         )}
         <div className="d-grid gap-2">
-          {/* <div className="experience-store">{store.type}</div> */}
-          <div className="store-name">{store.name}</div>
+          <div className="store-name">
+            {store["BUSINESS / BRAND NAME"]} - {store.LOCALITY}
+          </div>
         </div>
         <FiChevronRight
           className={`ml-auto ${!hovered.show && ""}`}
@@ -82,27 +100,34 @@ const StoreItem: React.FC<StoreProps> = (props) => {
           size={22}
         />
       </div>
-      <div
-        style={{ borderBottom: "1px solid #ddd" }}
-        className="d-flex align-items-center gap-3 w-75 py-3"
-      >
-        <IconButton
-          as="a"
-          className="button text-dark"
-          href={`tel:${store.phone}`}
-        >
-          <IoCallOutline size={18} />
-        </IconButton>
-        <Button
-          styledCss="border: 1px solid #ddd;"
-          secondary
-          className="px-2 py-2 flex-grow-1 bg-transparent"
-        >
-          <div className="d-flex align-items-center justify-content-center gap-2">
-            <RiDirectionLine size={18} />
-            <div>Get directions</div>
-          </div>
-        </Button>
+      <div style={{ borderBottom: "1px solid #ddd" }} className="w-100">
+        <div className="d-flex align-items-center gap-3 w-75 py-3">
+          <IconButton
+            as="a"
+            className="button text-dark"
+            href={`tel:+${store["MAIN PHONE NO."]}`}
+          >
+            <IoCallOutline size={18} />
+          </IconButton>
+          <a
+            href={`http://maps.google.com/?q=${store.LATITUDE},${store.LONGITUDE}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-grow-1"
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              styledCss="border: 1px solid #ddd;"
+              secondary
+              className="px-2 py-2 bg-transparent w-100"
+            >
+              <div className="d-flex align-items-center justify-content-center gap-2">
+                <RiDirectionLine size={18} />
+                <div>Get directions</div>
+              </div>
+            </Button>
+          </a>
+        </div>
       </div>
     </StoreWrapper>
   );
