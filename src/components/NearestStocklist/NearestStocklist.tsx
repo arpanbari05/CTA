@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { CloseButton } from "..";
 import SearchPanel from "./SearchPanel";
@@ -10,18 +9,10 @@ import { useCSVData, useToggle, useWindowSize } from "../../customHooks";
 import StoreInfo from "./StoreInfo";
 import Map from "./Map";
 
-const libraries: "places"[] = ["places"];
-
 interface Props {}
 
 const NearestStocklist: React.FC<Props> = (props) => {
   const { storelist, getStoresInCity } = useCSVData();
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey:
-      process.env.REACT_APP_BILLING_ACCOUNT_GOOGLE_API_KEY || "",
-    libraries: libraries,
-  });
   const [selectedLocation, setSelectedLocation] = useState({
     name: "",
     lat: 0,
@@ -29,20 +20,7 @@ const NearestStocklist: React.FC<Props> = (props) => {
   });
   const [activeStore, setActiveStore] = useState<StoreType | null>(null);
   const storeDetailsToggler = useToggle(false);
-  const [center, setCenter] = React.useState({
-    lat: 0,
-    lng: 0,
-  });
   const { height } = useWindowSize();
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setCenter({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
-  }, []);
 
   const StocklistContextValue = {
     location: selectedLocation,
@@ -59,29 +37,13 @@ const NearestStocklist: React.FC<Props> = (props) => {
   const handleClose = () => {
     window.parent.postMessage({ type: "oniframeclose" }, "*");
   };
-
-  if (!isLoaded) return null;
-
   return (
     <StocklistContext.Provider value={StocklistContextValue}>
       <Container fullScreenHeight={height}>
         <StocklistWrapper className="d-flex w-100 h-100">
           <CloseButton
             id={"nearest-stocklist-close-btn"}
-            styledCss={`
-                position: absolute;
-                top: -2rem;
-                right: -2rem;
-                background: none;
-                color: white;
-                z-index: 1;
-                ${ls}, (max-width: 1024px) {
-                  top: .9rem;
-                  right: .9rem;
-                  background: white;
-                  color: black;
-                }
-            `}
+            className="close-button"
             onClick={handleClose}
           />
           <div className="d-flex flex-column">
@@ -94,7 +56,7 @@ const NearestStocklist: React.FC<Props> = (props) => {
             )}
             <SearchPanel show={!showStoreInfo} />
           </div>
-          <Map activeStore={activeStore} center={center} />
+          <Map activeStore={activeStore} />
         </StocklistWrapper>
       </Container>
     </StocklistContext.Provider>
@@ -121,6 +83,21 @@ const Container = styled.div<{ fullScreenHeight: number }>`
 const StocklistWrapper = styled.div`
   border-radius: 0.3rem;
   overflow: hidden;
+
+  .close-button {
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    background: none;
+    color: white;
+    z-index: 1;
+    ${ls}, (max-width: 1024px) {
+      top: 0.9rem;
+      right: 0.9rem;
+      background: white;
+      color: black;
+    }
+  }
 
   .heading {
     font-size: 1.7rem;
